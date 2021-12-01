@@ -5,14 +5,14 @@ namespace API.Data.Migrations
     public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
-        {
+       {
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UserName = table.Column<int>(type: "INTEGER", nullable: false)
+                    UserName = table.Column<string>(type: "STRING", nullable: false)
                 },
                 constraints: table =>
                 {
