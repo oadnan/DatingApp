@@ -29,17 +29,20 @@ namespace API
         {
             services.AddDbContext<DataContext>(options => 
             {
-                options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
+                var conStr = _config.GetConnectionString("DefaultConnection");
+                options.UseSqlite(conStr);
             });
+            //posgress
+            //SQLExpress
             services.AddControllers();
             services.AddCors();
 
-            /*
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
             });
-            */
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,8 +51,8 @@ namespace API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                // app.UseSwagger();
-                // app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
             }
 
             app.UseHttpsRedirection();
