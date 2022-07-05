@@ -29,19 +29,21 @@
         <button (click)="resetFilters()" class="btn btn-info ml-1" type="submit">Reset filters</button>
         <div class="col">
             <div class="btn-group float-right">
-                <button class="btn btn-primary" 
-                type="button"
-                name='orderBy' 
-                (click)="loadMembers()"
-                btnRadio='lastActive'
-                [(ngModel)]="userParams.orderBy">Last active</button>
-    
-                <button class="btn btn-primary" 
-                type="button"
-                name='orderBy' 
-                (click)="loadMembers()"
-                btnRadio='created'
-                [(ngModel)]="userParams.orderBy">Newest members</button>
+                <button 
+                    type="button"
+                    class="btn btn-primary" 
+                    name='orderBy' 
+                    (click)="loadMembers()"
+                    btnRadio='lastActive'
+                    [(ngModel)]="userParams.orderBy">Last Active</button>
+
+                <button 
+                    type="button"
+                    class="btn btn-primary" 
+                    name='orderBy' 
+                    (click)="loadMembers()"
+                    btnRadio='created'
+                    [(ngModel)]="userParams.orderBy">Newest Members</button>
             </div>
         </div>
         
@@ -65,6 +67,5 @@
     nextText="&rsaquo;" 
     firstText="&laquo;" 
     lastText="&raquo;">
-
-    </pagination>
+</pagination>
 </div>
