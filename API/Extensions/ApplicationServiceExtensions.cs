@@ -17,6 +17,11 @@ namespace API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
+            services.AddDbContext<DataContext>(options =>
+            {
+                options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
+            });
+
             services.AddSingleton<PresenceTracker>();
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<ITokenService, TokenService>();
@@ -24,12 +29,7 @@ namespace API.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<LogUserActivity>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
-            services.AddDbContext<DataContext>(options =>
-            {
-                var conStr = config.GetConnectionString("DefaultConnection");
-                options.UseSqlite(conStr);
-            });
-
+           
             return services;
         }
     }
