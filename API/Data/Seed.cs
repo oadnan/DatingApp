@@ -1,10 +1,13 @@
-﻿using API.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
 using System;
-using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace API.Data
 {
@@ -13,7 +16,7 @@ namespace API.Data
         public static async Task ClearConnections(DataContext context)
         {
             context.Connections.RemoveRange(context.Connections);
-            await context.SaveChangesAsync();   
+            await context.SaveChangesAsync();
         }
 
         public static async Task SeedUsers(UserManager<AppUser> userManager,
@@ -21,9 +24,11 @@ namespace API.Data
         {
             if (await userManager.Users.AnyAsync()) return;
 
-            var userData = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
+            var userData = await File.ReadAllTextAsync("Data/UserSeedData.json");
+
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
             var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
-            if (users == null) return;
 
             var roles = new List<AppRole>
             {
@@ -44,7 +49,6 @@ namespace API.Data
                 user.LastActive = DateTime.SpecifyKind(user.LastActive, DateTimeKind.Utc);
                 await userManager.CreateAsync(user, "Pa$$w0rd");
                 await userManager.AddToRoleAsync(user, "Member");
-                //context.Users.Add(user);
             }
 
             var admin = new AppUser

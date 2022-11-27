@@ -5,10 +5,6 @@ using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Data
 {
@@ -38,8 +34,8 @@ namespace API.Data
             query = query.Where(u => u.UserName != userParams.CurrentUsername);
             query = query.Where(u => u.Gender == userParams.Gender);
 
-            var minDob = DateTime.Today.AddYears(-userParams.MaxAge -1);
-            var maxDob = DateTime.Today.AddYears(-userParams.MinAge);
+            var minDob = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-userParams.MaxAge -1));
+            var maxDob = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-userParams.MinAge));
 
             query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
 

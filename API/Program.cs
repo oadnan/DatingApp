@@ -1,23 +1,27 @@
-using System;
-using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
 using API.Extensions;
 using API.Middleware;
 using API.SignalR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
-builder.Services.AddControllers();
+
+// Services container.
+
 builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddControllers();
+builder.Services.AddCors();
 builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddSignalR();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
+});
+
+// middleware
 
 var app = builder.Build();
 
@@ -36,8 +40,8 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.MapControllers();
-//app.MapHub<PresenceHub>("hubs/presence");
-//app.MapHub<MessageHub>("hubs/message");
+app.MapHub<PresenceHub>("hubs/presence");
+app.MapHub<MessageHub>("hubs/message");
 app.MapFallbackToController("Index", "Fallback");
 
 using var scope = app.Services.CreateScope();
