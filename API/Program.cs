@@ -7,20 +7,24 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Services container.
+// Add services to the container.
 
-builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddControllers();
-builder.Services.AddCors();
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
+
+builder.Services.AddCors();
 builder.Services.AddSignalR();
+/*
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
 });
-
+*/
 // middleware
 
 var app = builder.Build();
