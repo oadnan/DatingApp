@@ -21,7 +21,7 @@ namespace API.Data
             var userData = await File.ReadAllTextAsync("Data/UserSeedData.json");
 
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
+                        
             var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
 
             var roles = new List<AppRole>
