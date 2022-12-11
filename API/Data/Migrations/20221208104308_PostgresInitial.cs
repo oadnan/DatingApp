@@ -33,10 +33,10 @@ namespace API.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     KnownAs = table.Column<string>(type: "text", nullable: true),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastActive = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastActive = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Gender = table.Column<string>(type: "text", nullable: true),
                     Introduction = table.Column<string>(type: "text", nullable: true),
                     LookingFor = table.Column<string>(type: "text", nullable: true),
@@ -215,8 +215,8 @@ namespace API.Data.Migrations
                     RecipientId = table.Column<int>(type: "integer", nullable: false),
                     RecipientUsername = table.Column<string>(type: "text", nullable: true),
                     Content = table.Column<string>(type: "text", nullable: true),
-                    DateRead = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    MessageSent = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DateRead = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    MessageSent = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     SenderDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     RecipientDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
