@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, UntypedFormBuilder, FormControl, UntypedFormGroup, FormGroupName, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, FormControl, UntypedFormGroup, FormGroupName, ValidatorFn, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../_services/account.service';
+import {formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -11,16 +12,15 @@ import { AccountService } from '../_services/account.service';
 })
 export class RegisterComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
-  registerForm: UntypedFormGroup;
-  maxDate: Date;
-  validationErrors: string[] = [];  
+  registerForm: FormGroup = new FormGroup({});
+  maxDate: Date = new Date();
+  validationErrors: string[] | undefined;  
 
   constructor(private accountService: AccountService, private toastr: ToastrService, 
     private fb: UntypedFormBuilder, private router: Router) { }
 
   ngOnInit(): void {
     this.initializeForm();
-    this.maxDate = new Date();
     this.maxDate.setFullYear(this.maxDate.getFullYear() -18);
   }
 
@@ -36,15 +36,14 @@ export class RegisterComponent implements OnInit {
         Validators.minLength(4), Validators.maxLength(8)]],
       confirmPassword: ['', [Validators.required, this.matchValues('password')]]
     })
-    this.registerForm.controls.password.valueChanges.subscribe(() => {
-      this.registerForm.controls.confirmPassword.updateValueAndValidity();
+    this.registerForm.controls.password.valueChanges.subscribe({
+      next: () => this.registerForm.controls['confirmPassword'].updateValueAndValidity()
     })
   }
 
   matchValues(matchTo: string): ValidatorFn {
     return (control: AbstractControl) => {
-      return control?.value === control?.parent?.controls[matchTo].value 
-        ? null : {isMatching: true}
+      return control.value === control.parent?.get(matchTo)?.value ? null : {notMatching: true}
     }
   }
 
@@ -67,9 +66,7 @@ export class RegisterComponent implements OnInit {
 
   private getDateOnly(dob: string | undefined) {
     if (!dob) return;
-    let theDob = new Date(dob);
-    return new Date(theDob.setMinutes(theDob.getMinutes()-theDob.getTimezoneOffset()))
-      .toISOString().slice(0,10);
+    return formatDate(dob, 'yyyy-MM-dd', 'en-US');
   }
 
 }
